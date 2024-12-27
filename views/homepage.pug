@@ -1,0 +1,14 @@
+doctype html
+html 
+    head 
+        title= `Homepage`
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="/css/style.css")
+    body    
+        h1 Movies
+        .cards 
+            each movie in data
+                .card 
+                    h2.card__name #{movie.properties.movietitle}
+                    p.card__genre #{movie.properties.moviegenre}
+                    p.card__release #{movie.properties.moviereleasedate}

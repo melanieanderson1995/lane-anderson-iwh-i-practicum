@@ -7,6 +7,63 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.get('/', async (req, res) => {
+    const customObjects = 'https://api.hubspot.com/crm/v3/objects/movies';
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    }
+    const params = {
+        properties: 'movie_title,movie_release_date,movie_genre'  // Replace with the properties for your custom object
+    };
+    try {
+        const resp = await axios.get(customObjects, { headers, params });
+        const data = resp.data.results;
+        console.log("!!!DATA", data);
+        res.render('homepage', { title: 'Update Custom Object Form | Integrating With HubSpot I Practicum', data });      
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+app.get('/update-cobj', async (req, res) => {
+    const customObjects = 'https://api.hubspot.com/crm/v3/objects/movies';
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    }
+    try {
+        const resp = await axios.get(customObjects, { headers });
+        const data = resp.data.results;
+        res.render('updates', { title: 'Update Custom Object Form | Integrating With HubSpot I Practicum', data });      
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+app.post('/update-cobj', async (req, res) => {
+    const update = {
+        properties: {
+            "movie_genre": req.body.newVal
+        }
+    }
+
+    const email = req.query.email;
+    const updateMovie = `https://api.hubapi.com/crm/v3/objects/contacts/${email}?idProperty=email`;
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+
+    try { 
+        await axios.patch(updateMovie, update, { headers } );
+        res.redirect('/');
+    } catch(err) {
+        console.error(err);
+    }
+
+});
+
 // * Please DO NOT INCLUDE the private app access token in your repo. Don't do this practicum in your normal account.
 const PRIVATE_APP_ACCESS = '';
 

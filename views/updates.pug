@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title Update Custom Object Form | Integrating With HubSpot I Practicum
+  body
+    h1 Update Custom Object
+    form(action="/update-cobj" method="post")
+      label(for="property1") Property 1:
+      input#property1(name="property1" type="text")
+      br
+      label(for="property2") Property 2:
+      input#property2(name="property2" type="text")
+      br
+      label(for="property3") Property 3:
+      input#property3(name="property3" type="text")
+      br
+      button(type="submit") Submit
+    br
+    a(href="/") Return to the homepage
